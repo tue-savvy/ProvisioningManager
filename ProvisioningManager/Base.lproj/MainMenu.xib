@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -147,11 +147,11 @@ CA
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SjL-9B-NYr">
                         <rect key="frame" x="0.0" y="0.0" width="1200" height="500"/>
                         <clipView key="contentView" drawsBackground="NO" id="5io-ju-jHm">
-                            <rect key="frame" x="1" y="17" width="238" height="117"/>
+                            <rect key="frame" x="1" y="0.0" width="1198" height="499"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView identifier="TableView" appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveName="TableViewInfo" rowSizeStyle="automatic" headerView="kMh-s9-MdM" viewBased="YES" id="KB1-Ay-2mz">
-                                    <rect key="frame" x="0.0" y="0.0" width="728" height="0.0"/>
+                                <tableView identifier="TableView" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveName="TableViewInfo" rowSizeStyle="automatic" headerView="kMh-s9-MdM" viewBased="YES" id="KB1-Ay-2mz">
+                                    <rect key="frame" x="0.0" y="0.0" width="1198" height="476"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -360,16 +360,16 @@ CA
                             </subviews>
                             <nil key="backgroundColor"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" appearanceType="vibrantLight" verticalHuggingPriority="750" horizontal="YES" id="zkA-mw-HeG">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zkA-mw-HeG">
                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" appearanceType="vibrantLight" verticalHuggingPriority="750" horizontal="NO" id="Rki-pb-92R">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Rki-pb-92R">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="kMh-s9-MdM">
-                            <rect key="frame" x="0.0" y="0.0" width="238" height="17"/>
+                            <rect key="frame" x="0.0" y="0.0" width="1198" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                         <connections>
@@ -412,6 +412,12 @@ CA
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="reload:" target="Voe-Tx-rLC" id="iSW-Lm-CDq"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Remove Duplicate" id="Yxd-bK-Ykz" userLabel="Remove Duplicate">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeDuplicate:" target="-1" id="TTt-bn-4fj"/>
                     </connections>
                 </menuItem>
             </items>

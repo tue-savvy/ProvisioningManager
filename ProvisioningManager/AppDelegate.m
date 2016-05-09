@@ -130,7 +130,17 @@
 }
 - (void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors
 {
-    [self.provisioningArray sortUsingDescriptors:[tableView sortDescriptors]];
+    NSSortDescriptor *sortByColumn = [tableView sortDescriptors].firstObject;
+    NSMutableArray *sortDescriptors = [NSMutableArray arrayWithObject:sortByColumn];
+    if ([sortByColumn.key isEqualToString:@"creationDate"]) {
+        [sortDescriptors addObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    } else if ([sortByColumn.key isEqualToString:@"name"]) {
+        [sortDescriptors addObject:[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    } else {
+        [sortDescriptors addObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+        [sortDescriptors addObject:[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    }
+    [self.provisioningArray sortUsingDescriptors:sortDescriptors];
     [tableView reloadData];
 }
 #pragma mark - Menu Action
@@ -140,6 +150,8 @@
         return self.tableView.numberOfSelectedRows > 0;
     } else if (menuItem.action == @selector(export:)) {
         return self.tableView.numberOfSelectedRows >= 1;
+    } else if (menuItem.action == @selector(removeDuplicate:)) {
+        return self.tableView.numberOfSelectedRows == 1;
     }
     return [self respondsToSelector:menuItem.action];
 }
@@ -213,5 +225,47 @@
 - (IBAction)reload:(id)sender {
     [self buildListIdentity];
     [self.tableView reloadData];
+}
+- (IBAction)removeDuplicate:(id)sender {
+    Provisioning *provisioning = self.provisioningArray[self.tableView.selectedRow];
+    
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSWarningAlertStyle;
+    alert.messageText = @"Are you sure you want to remove duplicated provisioning?";
+    alert.informativeText = [NSString stringWithFormat:@"All provisioning with same name: \"%@\" and identity: \"%@\" will be deleted. The newest provisioning will be keep", provisioning.name, provisioning.signingIdentity.commonName];
+    [alert addButtonWithTitle:@"Remove"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSAlertFirstButtonReturn) {
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSMutableArray *deletingProvisionings = [NSMutableArray array];
+            Provisioning *latestPro = nil;
+            for (Provisioning *pro in self.provisioningArray) {
+                if ([pro.name isEqualToString:provisioning.name] &&
+                    [pro.signingIdentity.commonName isEqualToString:provisioning.signingIdentity.commonName]) {
+                    [deletingProvisionings addObject:pro];
+                    
+                    if (latestPro == nil) {
+                        latestPro = pro;
+                    } else if ([latestPro.creationDate compare:pro.creationDate] == NSOrderedAscending) {
+                        //latest is older than pro
+                        latestPro = pro;
+                    }
+                }
+            }
+            
+            [deletingProvisionings removeObject:latestPro];
+            for (Provisioning *pro in deletingProvisionings) {
+                [fm removeItemAtPath:pro.path error:nil];
+            }
+            [self.provisioningArray removeObjectsInArray:deletingProvisionings];
+            [self.tableView reloadData];
+            
+//            Provisioning *provisioning = self.provisioningArray[idx];
+//            [fm removeItemAtPath:provisioning.path error:nil];
+//            [self.provisioningArray removeObjectsAtIndexes:[self.tableView selectedRowIndexes]];
+//            [self.tableView removeRowsAtIndexes:self.tableView.selectedRowIndexes withAnimation:NSTableViewAnimationSlideUp];
+        }
+    }];
 }
 @end
